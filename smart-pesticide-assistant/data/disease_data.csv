@@ -1,0 +1,15 @@
+crop,disease,cause,recommended_pesticide,dosage,spray_interval,organic_alternative,prevention,safety_precautions
+Tomato,Early Blight,Fungal infection,Mancozeb,2g/L,7 days,Neem Oil,Crop rotation,Wear gloves
+Tomato,Late Blight,Fungal infection,Metalaxyl,2g/L,7 days,Trichoderma,Field sanitation,Wear mask
+Potato,Early Blight,Fungal infection,Mancozeb,2g/L,7 days,Neem Oil,Crop rotation,Avoid skin contact
+Potato,Late Blight,Fungal infection,Metalaxyl,2g/L,7 days,Trichoderma,Proper drainage,Wear gloves
+Rice,Blast,Fungus,Tricyclazole,0.6g/L,10 days,Pseudomonas,Use resistant varieties,Protect eyes
+Rice,Brown Spot,Fungus,Mancozeb,2g/L,10 days,Neem Extract,Seed treatment,Wear mask
+Cotton,Leaf Curl Virus,Whitefly attack,Imidacloprid,0.5ml/L,10 days,Neem Oil,Control whiteflies,Avoid inhalation
+Cotton,Bacterial Blight,Bacteria,Copper Oxychloride,3g/L,7 days,Compost Tea,Use clean seeds,Wear gloves
+Maize,Common Rust,Fungus,Propiconazole,1ml/L,10 days,Neem Spray,Field monitoring,Use PPE
+Maize,Leaf Blight,Fungus,Mancozeb,2g/L,7 days,Trichoderma,Remove infected leaves,Wear mask
+Chili,Anthracnose,Fungus,Carbendazim,1g/L,7 days,Neem Oil,Field sanitation,Use PPE
+Chili,Leaf Curl Virus,Whitefly attack,Imidacloprid,0.5ml/L,10 days,Neem Oil,Control insects,Wear gloves
+Groundnut,Tikka Disease,Fungus,Chlorothalonil,2g/L,10 days,Neem Extract,Crop rotation,Use PPE
+Groundnut,Rust,Fungus,Mancozeb,2g/L,10 days,Neem Oil,Field sanitation,Wear gloves
