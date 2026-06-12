@@ -15,11 +15,6 @@ provider = st.sidebar.selectbox(
     "AI Provider",
     ["Gemini", "Ollama"]
 )
-if ai_provider == "Gemini":
-    api_key = st.sidebar.text_input(
-        "Gemini API Key",
-        type="password"
-    )
 st.sidebar.info(
     "Supports English, Telugu and Hindi."
 )
@@ -30,10 +25,26 @@ st.sidebar.info(
 st.title(
     translations[language]["title"]
 )
-st.success("AI-Powered Crop Disease Detection & Pesticide Recommendation System")
-st.write(
-    "Upload a crop leaf image to identify diseases and get pesticide recommendations."
+st.success(
+    translations[language]["subtitle"]
 )
+
+st.write(
+    translations[language]["description"]
+)
+
+if provider == "Gemini":
+    api_key = st.sidebar.text_input(
+        "Gemini API Key",
+        type="password",
+        key="gemini_api_key"
+    )
+
+    if not api_key:
+        st.warning("Enter your Gemini API Key to continue.")
+        st.stop()
+else:
+    api_key = None
 
 uploaded_file = st.file_uploader(
     translations[language]["upload"],
@@ -47,20 +58,24 @@ if uploaded_file:
     st.image(
         image,
         caption="Uploaded Crop Image",
-        use_container_width=True
+        width="stretch"
     )
 
     with st.spinner("Analyzing crop..."):
 
-       result = analyze_plant_image(
-    image,
-    language,
-    api_key
-)
+        result = analyze_plant_image(
+            image,
+            language,
+            api_key
+        )
 
-    st.subheader("Diagnosis Report")
+    st.success("✅ Analysis Completed")
 
+    st.divider()
+
+    st.subheader("📋 Diagnosis Report")
     st.markdown(result)
+
     st.warning(
-    translations[language]["warning"]
-)
+        translations[language]["warning"]
+    )

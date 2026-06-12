@@ -91,3 +91,46 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+## Features
+
+- AI-powered crop disease detection
+- Pesticide recommendations
+- Organic alternatives
+- Prevention tips
+- English language support
+- Telugu language support
+- Hindi language support
+- Bring Your Own Gemini API Key (BYOK)
+
+## AI Providers
+
+### Currently Supported
+- Gemini (BYOK)
+
+### Planned Support
+- Ollama (Coming Soon)
+# Smart Pesticide Assistant
+
+AI-Powered Crop Disease Detection & Pesticide Recommendation System
+
+## Features
+
+✅ Crop Disease Detection  
+✅ Pesticide Recommendations  
+✅ Organic Alternatives  
+✅ Prevention Tips  
+✅ Multi-language Support (English, Telugu, Hindi)  
+✅ BYOK (Bring Your Own Gemini API Key)  
+✅ Streamlit Web Interface  
+
+## AI Providers Supported
+
+- Gemini (BYOK)
+- Ollama (Local AI) - planned integration
+
+## Planned Features
+
+🔄 Ollama Local AI Integration  
+🔄 Confidence Score  
+🔄 PDF Report Generation
