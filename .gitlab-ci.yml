@@ -1,11 +1,17 @@
 stages:
+  - lint
   - test
 
-test_app:
+lint:
   image: python:3.11
+  before_script:
+    - pip install ruff
+  script:
+    - ruff check .
 
+test:
+  image: python:3.11
   before_script:
     - pip install -r requirements.txt
-
   script:
     - python frontend/backend/services/test_gemini.py
