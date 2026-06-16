@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 
 # Dummy/Placeholder imports from your project structure
-from services.gemini_service import analyze_plant_image
+from backend.services.gemini_service import analyze_plant_image
 from translations import translations
 
 st.set_page_config(
