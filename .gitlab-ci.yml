@@ -8,5 +8,4 @@ test_app:
     - pip install -r requirements.txt
 
   script:
-    -script:
     - python frontend/backend/services/test_gemini.py
