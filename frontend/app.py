@@ -1,9 +1,30 @@
 import streamlit as st
 from PIL import Image
+import requests
 
 # Dummy/Placeholder imports from your project structure
 from backend.services.gemini_service import analyze_plant_image
 from translations import translations
+def ask_ollama(prompt):
+    try:
+        response = requests.post(
+            "http://localhost:11434/api/generate",
+            json={
+                "model": "qwen3:8b",
+                "prompt": prompt,
+                "stream": False
+            },
+            timeout=120
+        )
+
+        data = response.json()
+        return data.get("response", "")
+
+    except requests.exceptions.Timeout:
+        return "Ollama is taking too long. Please try again."
+
+    except Exception as e:
+        return f"Ollama Error: {e}"
 
 st.set_page_config(
     page_title="Smart Pesticide Assistant",
@@ -80,32 +101,96 @@ with tab1:
 
 
 # --- TAB 2: AI CHATBOT FOR FARMERS ---
+# --- TAB 2: AI CHATBOT FOR FARMERS ---
 with tab2:
     st.header(translations[language]["chatbot_header"])
-    
-    # Initialize chatbot message history state if not present
+
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Display past messages
+    # Display previous messages
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # Chat Input Box
-    if prompt := st.chat_input(translations[language]["chatbot_placeholder"]):
+    # Chat input
+    prompt = st.chat_input(
+        translations[language]["chatbot_placeholder"]
+    )
+
+    if prompt:
+
+        # User message
         with st.chat_message("user"):
             st.markdown(prompt)
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        
-        # Simulating chatbot response (You can later route this to your gemini_service)
+
+        st.session_state.messages.append(
+            {"role": "user", "content": prompt}
+        )
+
+        # Assistant reply
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                reply = f"Thank you for asking about '{prompt}'. To yield optimal outputs, ensure adequate watering and balanced N-P-K soil mixtures."
+
+                if provider == "Ollama":
+
+                    full_prompt = f"""
+You are AgriBot, an expert agricultural assistant for Indian farmers.
+
+Rules:
+- Answer only agriculture, crops, pests, diseases, fertilizers, irrigation, weather and farming questions.
+
+- If the question is NOT agriculture related:
+  - Telugu: "నేను వ్యవసాయ సంబంధిత ప్రశ్నలకు మాత్రమే సమాధానం ఇస్తాను."
+  - Hindi: "मैं केवल कृषि संबंधी प्रश्नों का उत्तर दे सकता हूँ।"
+  - English: "I can only answer agriculture-related questions."
+
+- If language is Telugu, answer in Telugu.
+- If language is Hindi, answer in Hindi.
+- If language is English, answer in English.
+- If the question is written in Roman Telugu (English letters), understand it and reply in Telugu script.
+
+Examples:
+
+Question: Vari pantalo blast disease lakshanalu enti?
+Answer:
+వరి పంటలో బ్లాస్ట్ వ్యాధి ముఖ్య లక్షణాలు:
+• ఆకులపై వజ్రాకారపు గోధుమ రంగు మచ్చలు కనిపిస్తాయి.
+• ఆకులు ఎండిపోవచ్చు.
+• దిగుబడి తగ్గే అవకాశం ఉంటుంది.
+
+Question: Patti pantalo aphids ki mandu enti?
+Answer:
+పత్తి పంటలో ఆఫిడ్స్ నియంత్రణకు ఇమిడాక్లోప్రిడ్ లేదా థియామెథాక్సామ్ వంటి మందులను వ్యవసాయ అధికారుల సూచన మేరకు ఉపయోగించండి.
+
+Question: Tomato mokkaki aakulu pasupu ga avutunnayi enduku?
+Answer:
+టమాటా ఆకులు పసుపు రంగులోకి మారడానికి పోషక లోపం, వైరస్ లేదా నీటి నిర్వహణ సమస్యలు కారణం కావచ్చు.
+
+Now answer the farmer's question.
+
+Language: {language}
+
+Question:
+{prompt}
+
+Answer:
+"""
+
+                    reply = ask_ollama(full_prompt)
+
+                else:
+                    reply = (
+                        f"Thank you for asking about '{prompt}'. "
+                        "Please configure Gemini integration."
+                    )
+
                 st.markdown(reply)
-        st.session_state.messages.append({"role": "assistant", "content": reply})
 
-
+        st.session_state.messages.append(
+            {"role": "assistant", "content": reply}
+        )
+        
 # --- TAB 3: WEATHER-BASED SPRAY RECOMMENDATION ---
 with tab3:
     st.header(translations[language]["weather_header"])
