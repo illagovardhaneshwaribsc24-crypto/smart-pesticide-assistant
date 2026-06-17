@@ -4,16 +4,10 @@ import google.generativeai as genai
 
 load_dotenv()
 
-genai.configure(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-model = genai.GenerativeModel(
-    "gemini-2.5-flash"
-)
+model = genai.GenerativeModel("gemini-2.5-flash")
 
-response = model.generate_content(
-    "What disease commonly affects tomato leaves?"
-)
+response = model.generate_content("What disease commonly affects tomato leaves?")
 
 print(response.text)

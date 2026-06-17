@@ -2,6 +2,7 @@ import pandas as pd
 
 df = pd.read_csv("data/disease_data.csv")
 
+
 def get_recommendation(disease):
     result = df[df["disease"].str.lower() == disease.lower()]
 

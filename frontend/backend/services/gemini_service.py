@@ -4,16 +4,15 @@ import google.generativeai as genai
 
 load_dotenv()
 
+
 def analyze_plant_image(image, language, api_key=None):
 
     if api_key:
-       print("USING SIDEBAR API KEY")
-       genai.configure(api_key=api_key)
+        print("USING SIDEBAR API KEY")
+        genai.configure(api_key=api_key)
     else:
-       print("USING .ENV API KEY")
-       genai.configure(
-        api_key=os.getenv("GEMINI_API_KEY")
-    )
+        print("USING .ENV API KEY")
+        genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
     model = genai.GenerativeModel("gemini-2.5-flash")
 
@@ -49,9 +48,7 @@ Return the complete response only in {language}.
 """
 
     try:
-        response = model.generate_content(
-            [prompt, image]
-        )
+        response = model.generate_content([prompt, image])
 
         return response.text
 
