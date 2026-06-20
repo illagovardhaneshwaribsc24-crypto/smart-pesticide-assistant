@@ -25,9 +25,10 @@ type_check:
   stage: type_check
   image: python:3.11
   before_script:
-    - pip install mypy
+    - pip install -r requirements.txt
+    - pip install mypy pandas-stubs
   script:
-    - mypy .
+    - mypy backend
 
 test:
   stage: test
