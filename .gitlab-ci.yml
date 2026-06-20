@@ -53,3 +53,12 @@ secret_scan:
     - pip install detect-secrets
   script:
     - detect-secrets scan .
+
+dependency_audit:
+  stage: test
+  image: python:3.11
+  before_script:
+    - pip install pip-audit
+    - pip install -r requirements.txt
+  script:
+    - pip-audit
