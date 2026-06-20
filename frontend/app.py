@@ -1,15 +1,15 @@
-import sys
 from pathlib import Path
+import sys
+
+import requests
+import streamlit as st
+from PIL import Image
+
+from backend.services.gemini_service import analyze_plant_image
+from translations import translations
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT_DIR))
-import streamlit as st
-from PIL import Image
-import requests
-
-# Dummy/Placeholder imports from your project structure
-from backend.services.gemini_service import analyze_plant_image
-from translations import translations
 
 
 def ask_ollama(prompt):
