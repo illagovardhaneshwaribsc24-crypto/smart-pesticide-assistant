@@ -45,3 +45,11 @@ coverage:
     - pip install pytest pytest-cov
   script:
     - pytest --cov=. --cov-fail-under=1
+
+secret_scan:
+  stage: test
+  image: python:3.11
+  before_script:
+    - pip install detect-secrets
+  script:
+    - detect-secrets scan .
