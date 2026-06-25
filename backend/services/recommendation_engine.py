@@ -1,12 +1,8 @@
-import pandas as pd
-
-df = pd.read_csv("data/disease_data.csv")
-
-
 def get_recommendation(disease):
-    result = df[df["disease"].str.lower() == disease.lower()]
+    data = {
+        "rust": "Use sulfur-based fungicide",
+        "blight": "Use copper oxychloride",
+        "leaf spot": "Use neem oil spray"
+    }
 
-    if result.empty:
-        return None
-
-    return result.iloc[0].to_dict()
+    return data.get(disease.lower(), "Consult agricultural expert")

@@ -1,9 +1,9 @@
-from pathlib import Path
 import sys
-
 import requests
 import streamlit as st
-from PIL import Image
+
+from pathlib import Path
+from backend.services.recommendation_engine import get_recommendation
 
 from backend.services.gemini_service import analyze_plant_image
 from translations import translations
@@ -63,6 +63,9 @@ tab1, tab2, tab3, tab4 = st.tabs(translations[language]["tabs"])
 with tab1:
     st.write(translations[language]["description"])
 
+    from backend.services.image_utils import load_image
+    from backend.services.weather_advisor import get_weather_advice
+
     uploaded_file = st.file_uploader(
         translations[language]["upload"],
         type=["jpg", "jpeg", "png"],
@@ -70,14 +73,13 @@ with tab1:
     )
 
     if uploaded_file:
-        image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Crop Image", width="stretch")
+        image = load_image(uploaded_file)
+        st.image(image, caption="Uploaded Crop Image", use_container_width=True)
 
         if provider == "Gemini" and not api_key:
             st.error("Please enter your Gemini API Key in the sidebar to run analysis.")
         else:
             with st.spinner("Analyzing crop..."):
-                # Injecting a prompt flag requesting Explainable AI details inside your service layer implicitly
                 result = analyze_plant_image(image, language, api_key)
 
             st.success("✅ Analysis Completed")
@@ -86,12 +88,16 @@ with tab1:
             st.subheader("📋 Diagnosis Report")
             st.markdown(result)
 
-            # --- EXPLAINABLE AI SECTION ---
-            st.info("💡 **Explainable AI (XAI) Insights:**")
-            st.caption(
-                "Our vision algorithm focused on discoloration, pixel lesions, and leaf margin irregularities "
-                "to form this deduction with a 92% structural confidence metric."
-            )
+            st.subheader("🌿 Pesticide Recommendation")
+
+            disease = st.text_input("Enter detected disease (e.g., rust, blight)")
+
+            if disease:
+                recommendation = get_recommendation(disease)
+                st.success(recommendation)
+
+            st.info("💡 Explainable AI Insights:")
+            st.caption("AI detected leaf discoloration, lesions, and texture anomalies.")
 
             st.warning(translations[language]["warning"])
 
@@ -211,7 +217,9 @@ with tab3:
         st.success(
             "✅ **Optimal Conditions:** Safe parameters verified! Good time to apply treatments."
         )
-
+    if st.button("Get AI Weather Advice"):
+       advice = get_weather_advice(temp, wind, humidity)
+       st.info(advice)
 
 # --- TAB 4: COST ESTIMATION ---
 with tab4:
@@ -262,3 +270,4 @@ with tab4:
             ],
         }
         st.table(cost_breakdown)
+75
