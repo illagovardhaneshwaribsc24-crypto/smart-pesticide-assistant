@@ -1,15 +1,15 @@
 import sys
-import requests
-import streamlit as st
-
 from pathlib import Path
-from backend.services.recommendation_engine import get_recommendation
-
-from backend.services.gemini_service import analyze_plant_image
-from translations import translations
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT_DIR))
+
+import requests
+import streamlit as st
+
+from backend.services.recommendation_engine import get_recommendation
+from backend.services.gemini_service import analyze_plant_image
+from translations import translations
 
 
 def ask_ollama(prompt):
