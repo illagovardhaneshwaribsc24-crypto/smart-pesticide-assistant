@@ -1,60 +1,31 @@
-import os
-from dotenv import load_dotenv
-import google.generativeai as genai
+# backend/services/gemini_service.py
+import streamlit as st
+from google import genai
 
-load_dotenv()
-print("API KEY:", os.getenv("GEMINI_API_KEY"))
-
-def analyze_plant_image(image, language, api_key=None):
-    # Configure API key
-    if api_key:
-        print("USING SIDEBAR API KEY")
-        genai.configure(api_key=api_key)
-        key = api_key if api_key else os.getenv("GEMINI_API_KEY")
-        print("Loaded key:", key[:10] if key else "None")
-        genai.configure(api_key=key)
-    else:
-        print("USING .ENV API KEY")
-        genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-    # Initialize model
-    model = genai.GenerativeModel("gemini-2.5-flash")
-
-    # Construct prompt
-    prompt = f"""
-    You are an agricultural expert.
-
-    IMPORTANT LANGUAGE RULE:
-    The selected language is: {language}
-
-    Write the response in proper Markdown format.
-
-    Use:
-
-    ## 🌱 Crop Name
-
-    ## 🦠 Disease Name
-
-    ## ⚠️ Cause
-
-    ## 💊 Recommended Pesticide
-
-    ## 📏 Dosage
-
-    ## 🌿 Organic Alternative
-
-    ## ✅ Prevention Tips
-
-    For Prevention Tips use bullet points.
-
-    Leave one blank line between sections.
-
-    Return the complete response only in {language}.
+def analyze_plant_image(image, language):
     """
-
-    # Generate content
+    Analyzes the plant image using the new google-genai SDK.
+    'image' should be a PIL Image object loaded by your load_image utility.
+    """
     try:
-        response = model.generate_content([prompt, image])
+        # Re-initialize or pass the client. 
+        # Best practice is to fetch it from st.secrets if not passed as an argument.
+        client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+        
+        prompt = f"""
+        You are an expert plant pathologist. Analyze this crop image and provide a detailed diagnosis report.
+        Identify any visible diseases, nutrient deficiencies, or pest infestations.
+        
+        Provide the response completely in the following language: {language}
+        """
+        
+        # With the new SDK, you can pass the PIL Image object directly in the contents list
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=[image, prompt]  # Pass both the PIL Image and the text prompt here
+        )
+        
         return response.text
+
     except Exception as e:
-        return f"❌ Error: {str(e)}"
+        return f"Gemini Error inside service layer: {e}"
