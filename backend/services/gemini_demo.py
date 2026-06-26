@@ -1,13 +1,16 @@
 import os
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
 
-model = genai.GenerativeModel("gemini-2.0-flash")
-
-response = model.generate_content("What disease commonly affects tomato leaves?")
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents="What disease commonly affects tomato leaves?"
+)
 
 print(response.text)
