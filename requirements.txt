@@ -1,5 +1,7 @@
 streamlit
-pandas
-pillow
-google-generativeai
+google-genai
 python-dotenv
+tensorflow
+pillow
+numpy
+opencv-python
